@@ -42,4 +42,11 @@ let getGames = (plr) => {
         });
 }
 
-let checkGames = async () => {db.getPlrs().then(plrs => plrs.map(p => getGames(p)))}
+let min = 0;
+schedule.scheduleJob('0 * * * * *', () => {
+    min++;
+    if (min == 5) {
+        min = 0;
+        db.getPlrs().then(plrs => plrs.map(p => getGames(p)));
+    }
+});
