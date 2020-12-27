@@ -19,6 +19,7 @@ exports.getPlrs = (name=null) => {
     });
 }
 
+
 exports.addPlr = (name, discord=null) => {
     return new Promise(resolve => {
         rp.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}?api_key=${config.RIOT_API_KEY}`)

@@ -2,20 +2,14 @@ const config = require('./config');
 const schedule = require('node-schedule');
 const rp = require('request-promise');
 const db = require('./database');
+const express = require('express');
+const app = express();
 
 // schedule.scheduleJob('0 * * * *', () => {
-// schedule.scheduleJob('0 * * * * *', async () => {
 //     db.getPlrs().then(plrs => {
-//         plrs.map(p => {
-//             console.log(p)
-//         })
-//     })
-//     // rp.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/-PlWICvnUsQVBaQD_45W7dPDq0lyXgOG_ihyaB2RsNo0HOZxzC70wIA0?queue=420&api_key=${process.env.RIOT_API_KEY}`)
+//         plrs.map(p => { getGames(p) });
+//     });
 // });
-
-/**
- * 400
- */
 
 let getGames = (plr) => {
     plrGames = JSON.parse(plr.GAMES);
@@ -33,9 +27,7 @@ let getGames = (plr) => {
 
             Promise.all(prom).then(() => {
 
-                db.updateGames(plr.ID, JSON.stringify(plrGames)).then(err => {
-                    console.log(err)
-                });
+                db.updateGames(plr.ID, JSON.stringify(plrGames));
                 db.updateLastRecorded(plr.ID, res.totalGames);
             })
         }).catch(err => {
@@ -58,10 +50,6 @@ let getGames = (plr) => {
         });
 }
 
-let main = async () => {
-    db.getPlrs().then(plrs => {
-        plrs.map(p => { getGames(p) });
-    });
-}
+let main = async () => {db.getPlrs().then(plrs => plrs.map(p => getGames(p)))}
 
 main();
