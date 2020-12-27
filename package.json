@@ -1,0 +1,27 @@
+{
+  "name": "lol-smurf-challenge",
+  "version": "1.0.0",
+  "description": "match logger",
+  "main": "app.js",
+  "scripts": {
+    "start": "node .",
+    "test": "ECHO no test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Taimoor-Tariq/lol-smurf-challenge.git"
+  },
+  "author": "Taimoor Tariq",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Taimoor-Tariq/lol-smurf-challenge/issues"
+  },
+  "homepage": "https://github.com/Taimoor-Tariq/lol-smurf-challenge#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv-flow": "^3.2.0",
+    "node-schedule": "^1.3.2",
+    "request-promise": "^4.2.6",
+    "sqlite3": "^5.0.0"
+  }
+}
