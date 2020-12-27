@@ -18,11 +18,26 @@ const db = require('./database');
  */
 
 let getGames = (plr) => {
-    // plrGames = JSON.parse(plr.GAMES);
+    plrGames = JSON.parse(plr.GAMES);
     rp.get(`https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/${plr.ID}?queue=420&beginIndex=${plr.LAST_RECORDED}&api_key=${config.RIOT_API_KEY}`)
         .then(res => {
             res = JSON.parse(res);
-            db.updateLastRecorded(plr.ID, res.totalGames);
+            let prom = res.matches.map(m => {
+                plrGames.push({
+                    id: m.gameId,
+                    lane: m.lane,
+                    time: m.timestamp,
+                    champ: m.champion
+                });
+            });
+
+            Promise.all(prom).then(() => {
+
+                db.updateGames(plr.ID, JSON.stringify(plrGames)).then(err => {
+                    console.log(err)
+                });
+                db.updateLastRecorded(plr.ID, res.totalGames);
+            })
         }).catch(err => {
             err = JSON.parse(err.error);
             switch (err.status.status_code) {
@@ -31,6 +46,9 @@ let getGames = (plr) => {
                         plr.ID = newID;
                         getGames(plr);
                     });
+                    break;
+
+                case 404:
                     break;
             
                 default:
